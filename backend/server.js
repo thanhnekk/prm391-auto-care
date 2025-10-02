@@ -1,6 +1,8 @@
 const path = require('path')
 const dotenv = require('dotenv');
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config();
+console.log("✅ APPLICATION_NAME =", process.env.APPLICATION_NAME);
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -16,6 +18,7 @@ const cron = require('node-cron'); // cron để gửi thông báo real-time
 //     origin: "http://localhost:5173",// co thể sau này nó là restfull api, để sẵn
 //     credentials: true,
 // }
+
 app.use(morgan('combined')) //theo dõi log GET, POST...
 app.use(cors({
     origin: true, // Reflects the request origin

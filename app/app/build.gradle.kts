@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.app1"
+    namespace = "com.example.childrencare"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.app1"
+        applicationId = "com.example.childrencare"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -41,6 +41,23 @@ android {
 
 dependencies {
 
+    // --- Networking ---
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // --- Secure Storage ---
+    implementation(libs.androidx.security.crypto)
+
+    // --- RecyclerView ---
+    implementation(libs.androidx.recyclerview)
+
+    // --- Gson (JSON parsing) ---
+    implementation(libs.gson)
+
+    // Optional: Material Design, already in your project
+    implementation(libs.material.v1110)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

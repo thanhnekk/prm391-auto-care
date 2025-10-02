@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const doctorScheduleSchema = new mongoose.Schema({
   doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
   weekday: { type: Number, min: 0, max: 6, required: true }, // 0=Sunday
