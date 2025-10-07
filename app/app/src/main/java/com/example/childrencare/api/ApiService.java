@@ -1,6 +1,7 @@
 package com.example.childrencare.api;
 
 import com.example.childrencare.model.*;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -9,51 +10,63 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
     // Auth
-    @POST("auth/register")
+    @POST("auth/register") // Đăng ký
     Call<User> register(@Body User user);
 
-    @POST("auth/login")
+    @POST("auth/login") // Đăng nhập
     Call<AuthResponse> login(@Body User user);
 
-    @POST("auth/logout")
+    @POST("auth/logout") //Đăng xuất
     Call<AuthResponse> logout(@Body User user);
 
-    @POST("auth/refresh")
+    @POST("auth/refresh-token") //Refresh Token
     Call<AuthResponse> refreshToken(@Body RefreshRequest refreshRequest);
 
     //User
-    @GET("users/by-email")
+    @GET("users/by-email") // Lấy thông tin user by email( Hiện ở main, profile,...)
     Call<User> getUserDetail();
 
     // Doctor
-    @GET("doctor")
+    @GET("doctor") // Lấy tất cả các doctor( admin)
     Call<List<Doctor>> getDoctors();
 
-    @GET("doctor/{id}")
+    @GET("doctor/{id}") // Lấy thông tin doctor by id
     Call<Doctor> getDoctorDetail(@Path("id") String id);
 
     // Appointment
-    @POST("appointment")
-    Call<Appointment> createAppointment(@Body Appointment appointment);
+    @POST("appointments") // Tạo lịch khám
+    Call<Appointment> createAppointment(@Body AppointmentRequest appointment);
 
-    @GET("appointment/user/{userId}")
-    Call<List<Appointment>> getAppointmentsByUser(@Path("userId") String userId);
+    @GET("appointments/my") // Lấy thông tin lịch khám của user, sửa thành không tham số, dùng jwt tự động
+    Call<List<Appointment>> getAppointmentsByUser();
+
+    // Lấy appointment theo id, chỉ user sở hữu mới xem được
+    @GET("appointments/{id}")
+    Call<Appointment> getAppointmentByIdWithAuth(@Path("id") String appointmentId);
+
+    @GET("appointments/slots/{doctorId}") // Check slot trống của doctor by id và date
+    Call<List<Slot>> getDoctorSlots(@Path("doctorId") String doctorId, @Query("date") String date);
+
+    // Thanh toán appointment VNPay thành công
+    @POST("appointments/{id}/pay")
+    Call<JsonObject> payAppointment(@Path("id") String appointmentId);
 
     // Prescription
-    @GET("prescription/appointment/{appointmentId}")
+    @GET("prescription/appointment/{appointmentId}") // NaN
     Call<List<Prescription>> getPrescriptionByAppointment(@Path("appointmentId") String appointmentId);
 
     // ===== ServiceType API (user-accessible) =====
-    @GET("servicetypes")
+    @GET("servicetypes") // Lấy list service của hệ thống
     Call<List<ServiceType>> getAllServiceTypes();
 
-    @GET("servicetypes/{id}")
+    @GET("servicetypes/{id}") // Xem thông tin chi tiết service
     Call<ServiceType> getServiceTypeById(@Path("id") String id);
 
-    @GET("doctors/by-service/{serviceId}")
+    @GET("doctors/by-service/{serviceId}") // Lấy list doctor bởi service id
     Call<List<Doctor>> getDoctorsByService(@Path("serviceId") String serviceId);
 }

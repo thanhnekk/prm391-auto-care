@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.gson)
 
     // Optional: Material Design, already in your project
+
     implementation(libs.material.v1110)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

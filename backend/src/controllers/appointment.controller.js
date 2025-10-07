@@ -4,6 +4,8 @@ const AppointmentService = require("../services/appointment.service");
 const createAppointment = async (req, res, next) => {
     try {
         const appt = await AppointmentService.createAppointment({ ...req.body, userId: req.user.id });
+        const clientIp = req.ip;
+  console.log("Client IP:", clientIp);
         res.status(201).json(appt);
     } catch (err) { next(err); }
 };
@@ -36,4 +38,34 @@ const getAppointmentsByUser = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-module.exports = { createAppointment, payAppointment, cancelAppointment, completeAppointment, getAppointmentsByUser };
+const getDoctorSlots = async (req, res, next) => {
+    try {
+        const doctorId = req.params.doctorId;
+        const dateStr = req.query.date; // yyyy-mm-dd
+        if (!dateStr) return res.status(400).json({ message: "Thiếu query param 'date'" });
+
+        const slots = await AppointmentService.getDoctorSlots(doctorId, dateStr);
+        res.status(200).json(slots);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getAppointmentById = async (req, res, next) => {
+    try {
+        const appt = await AppointmentService.getAppointmentById(req.params.id);
+        res.status(200).json(appt);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getAppointmentByIdWithAuth = async (req, res, next) => {
+    try {
+        const appt = await AppointmentService.getAppointmentByIdWithAuth(req.params.id, req.user.id);
+        res.status(200).json(appt);
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports = { createAppointment, payAppointment, cancelAppointment, completeAppointment, getAppointmentsByUser,getDoctorSlots, getAppointmentById, getAppointmentByIdWithAuth };

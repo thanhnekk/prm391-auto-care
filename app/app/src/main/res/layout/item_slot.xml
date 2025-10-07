@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@color/white">
+
+    <!-- Indicator trống/đầy -->
+    <View
+        android:id="@+id/slot_available"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/circle_green" />
+
+    <!-- Thời gian slot -->
+    <TextView
+        android:id="@+id/tv_slot_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="08:00 - 09:00"
+        android:textSize="16sp"/>
+</LinearLayout>

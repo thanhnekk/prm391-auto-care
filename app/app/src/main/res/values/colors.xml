@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue_700">#1976D2</color>
+    <color name="slot_available">#2196F3</color> <!-- xanh dương -->
+    <color name="slot_unavailable">#F44336</color>
+    <color name="gray">#757575</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="nav_active">#4F46E5</color>
+    <color name="nav_inactive">#9E9E9E</color>
 </resources>

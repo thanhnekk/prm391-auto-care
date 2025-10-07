@@ -2,18 +2,20 @@ package com.example.childrencare.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.childrencare.R;
-import com.example.childrencare.adapter.DoctorAdapter;
+import com.example.childrencare.adapter.ServiceAdapter;
 import com.example.childrencare.api.ApiClient;
 import com.example.childrencare.api.ApiService;
-import com.example.childrencare.model.Doctor;
-import com.example.childrencare.utils.TokenManager;
+import com.example.childrencare.model.ServiceType;
+import com.example.childrencare.singleton.BookingSession;
 
 import java.util.List;
 
@@ -23,48 +25,49 @@ import retrofit2.Response;
 
 public class ServiceListActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    DoctorAdapter adapter;
-    TokenManager tokenManager;
+    private RecyclerView recyclerServices;
+    private ServiceAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_list);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        tokenManager = new TokenManager(this);
+        recyclerServices = findViewById(R.id.recycler_services);
+        recyclerServices.setLayoutManager(new LinearLayoutManager(this));
 
-        fetchDoctors();
+        loadAllServices();
     }
 
-    private void fetchDoctors() {
+    private void loadAllServices() {
         ApiService apiService = ApiClient.getClient(this).create(ApiService.class);
-        apiService.getDoctors().enqueue(new Callback<List<Doctor>>() {
+        Call<List<ServiceType>> call = apiService.getAllServiceTypes();
+
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+            public void onResponse(@NonNull Call<List<ServiceType>> call, @NonNull Response<List<ServiceType>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Tạo adapter với 2 tham số: danh sách + listener
-//                    adapter = new DoctorAdapter(response.body(), new DoctorAdapter.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(Doctor doctor) {
-//                            Toast.makeText(ServiceListActivity.this, "Clicked: " + doctor.getName(), Toast.LENGTH_SHORT).show();
-//                            // TODO: mở DoctorDetailActivity nếu muốn
-//                            // Intent intent = new Intent(ServiceListActivity.this, DoctorDetailActivity.class);
-//                            // intent.putExtra("doctorId", doctor.getId());
-//                            // startActivity(intent);
-//                        }
-//                    });
-                    recyclerView.setAdapter(adapter);
+                    List<ServiceType> services = response.body();
+
+                    adapter = new ServiceAdapter(services, service -> {
+                        Log.d("ServiceListActivity", "Clicked service: " + service.getName() + ", id=" + service.getId());
+                        BookingSession.getInstance().setSelectedService(service);
+                        Intent intent = new Intent(ServiceListActivity.this, DoctorListActivity.class);
+                        intent.putExtra("service_id", service.getId());
+                        intent.putExtra("service_name", service.getName());
+                        intent.putExtra("service_price", service.getPrice());
+                        startActivity(intent);
+                    });
+
+                    recyclerServices.setAdapter(adapter);
                 } else {
-                    Toast.makeText(ServiceListActivity.this, "Failed to load doctors", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ServiceListActivity.this, "Failed to load services", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Doctor>> call, Throwable t) {
-                Toast.makeText(ServiceListActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<List<ServiceType>> call, @NonNull Throwable t) {
+                Toast.makeText(ServiceListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

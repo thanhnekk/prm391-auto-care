@@ -21,6 +21,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.childrencare.singleton.BookingSession;
 
 public class DoctorListActivity extends AppCompatActivity {
 
@@ -36,8 +37,9 @@ public class DoctorListActivity extends AppCompatActivity {
         recyclerDoctors = findViewById(R.id.recycler_doctors);
         recyclerDoctors.setLayoutManager(new LinearLayoutManager(this));
 
-        String serviceId = getIntent().getStringExtra("service_id");
-
+        String serviceId =  BookingSession.getInstance().getSelectedService().getId();
+        String serviceName = getIntent().getStringExtra("service_name");
+        double price = getIntent().getDoubleExtra("service_price",0);
         loadDoctors(serviceId);
     }
 
@@ -62,8 +64,12 @@ public class DoctorListActivity extends AppCompatActivity {
                     Log.d("DoctorListActivity", "Doctors received: " + doctors.size());
 
                     adapter = new DoctorAdapter(doctors, serviceId, doctor -> {
+                        BookingSession.getInstance().setSelectedDoctor(doctor);
                         Intent intent = new Intent(DoctorListActivity.this, SlotSelectActivity.class);
                         intent.putExtra("doctor_id", doctor.getId());
+                        intent.putExtra("doctor_name", doctor.getName());   // thêm tên bác sĩ
+                        intent.putExtra("service_name", getIntent().getStringExtra("service_name"));
+                        intent.putExtra("service_price", getIntent().getDoubleExtra("service_price",0));
                         startActivity(intent);
                     });
                     recyclerDoctors.setAdapter(adapter);

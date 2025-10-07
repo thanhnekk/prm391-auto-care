@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">App1</string>
+    <!-- Content descriptions -->
+    <string name="cd_profile_icon">Profile</string>
+    <string name="cd_book_icon">Book appointment</string>
+    <string name="cd_no_appointments">No appointments icon</string>
+
+    <!-- UI texts (nếu bạn chưa có) -->
+    <string name="welcome_parent">Welcome, Parent!</string>
+    <string name="subtitle_priority">Your child\'s health is our priority</string>
+    <string name="my_profile">My Profile</string>
+    <string name="book_now">Book Now</string>
+    <string name="featured_services">Featured Services</string>
+    <string name="recent_appointments">Recent Appointments</string>
+    <string name="no_appointments_yet">No appointments yet</string>
+    <string name="book_first_prompt">Book your first appointment today</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cd_heart" />
+    <string name="cd_heart_icon" />
 </resources>

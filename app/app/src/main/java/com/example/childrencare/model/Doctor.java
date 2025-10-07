@@ -16,7 +16,8 @@ public class Doctor {
 
     @SerializedName("experience")
     private int experience;
-
+    @SerializedName("name")
+    private String doctorname;
     @SerializedName("serviceTypeIds")
     private List<ServiceType> serviceTypes;
 
@@ -38,7 +39,7 @@ public class Doctor {
 
     // --- Convenience methods ---
     public String getName() {
-        return user != null ? user.getUsername() : "Unknown";
+        return doctorname != null ? doctorname : (user != null ? user.getUsername() : "Unknown");
     }
 
     public String getEmail() {

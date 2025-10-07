@@ -1,10 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:orientation="vertical"
+    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SlotSelectActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Service & Doctor Info -->
+    <TextView
+        android:id="@+id/tv_service_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Service: "
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_doctor_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Doctor: "
+        android:textSize="15sp"
+        android:layout_marginTop="4dp" />
+
+    <!-- Date Picker Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:hintEnabled="true"
+        android:hint="Select Date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:focusable="false"
+            android:inputType="none"
+            android:paddingEnd="8dp"
+            tools:ignore="TouchTargetSizeCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Slots Recycler -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_slots"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Book Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Book Appointment"
+        android:textAllCaps="false"
+        android:enabled="false"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>

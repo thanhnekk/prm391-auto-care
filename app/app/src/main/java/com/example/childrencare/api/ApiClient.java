@@ -24,6 +24,22 @@ public class ApiClient {
     private static final String TAG = "ApiClient";
     private static Retrofit retrofit;
 
+    private static LogoutHandler logoutHandler;
+
+    public interface LogoutHandler {
+        void onLogout();
+    }
+
+    public static void setLogoutHandler(LogoutHandler handler) {
+        logoutHandler = handler;
+    }
+
+    private static void forceLogout(TokenManager tokenManager) {
+        tokenManager.clearTokens();
+        if (logoutHandler != null) {
+            new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> logoutHandler.onLogout());
+        }
+    }
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {
             TokenManager tokenManager = new TokenManager(context);
@@ -114,15 +130,17 @@ public class ApiClient {
                                 return chain.proceed(newRequest);
                             } else {
                                 Log.e(TAG, "❌ Refresh token failed. Logging out user.");
-                                tokenManager.clearTokens();
+                                ApiClient.forceLogout(tokenManager);
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "Error refreshing token: " + e.getMessage(), e);
-                            tokenManager.clearTokens();
+                            ApiClient.forceLogout(tokenManager);
+
                         }
                     } else {
                         Log.e(TAG, "No refresh token available, forcing logout.");
-                        tokenManager.clearTokens();
+                        ApiClient.forceLogout(tokenManager);
+
                     }
                 }
             }

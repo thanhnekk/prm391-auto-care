@@ -13,9 +13,31 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light"
+        android:theme="@style/Theme.App1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.VNPayActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="myapp"
+                    android:host="vnpay_return"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.BookingListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BookingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.SlotSelectActivity"
             android:exported="false" />
@@ -38,7 +60,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.App1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
