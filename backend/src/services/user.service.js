@@ -4,21 +4,25 @@ const { StatusCodes } = require("http-status-codes");
 const BaseError = require("../utils/BaseError.js");
 //const EmailService = require("../services/email.service.js");
 //Create user
-const createUser = async (req, res) => {
+// services/user.service.js
+const createUser = async (userData) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        console.log("📥 Received data in createUser:", userData); // Debug
+
+        if (!userData || !userData.email) {
+            throw new Error("Missing email in request body");
+        }
+
+        const user = await User.findOne({ email: userData.email });
         console.log("createUser is invoked");
 
-        //password hash
-        const passwordHash = await bcrypt.hash(req.body.password, 10);
-        req.body.password = passwordHash;
+        const passwordHash = await bcrypt.hash(userData.password, 10);
+        userData.passwordHash = passwordHash;
+        userData.role  = "user";
 
-        if (user == null) {
-            const newUser = new User(req.body);
+        if (!user) {
+            const newUser = new User(userData);
             const savedUser = await newUser.save();
-
-            //send welcome email
-            //EmailService.sendWelcomeOnboardEmail(req.body.username, req.body.email);
             return savedUser;
         } else {
             throw new Error("Email này đã có người sử dụng");

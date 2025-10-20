@@ -4,66 +4,200 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SlotSelectActivity">
 
-    <!-- Service & Doctor Info -->
-    <TextView
-        android:id="@+id/tv_service_name"
+    <RelativeLayout
+        android:id="@+id/header_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Service: "
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:layout_height="100dp"
+        android:background="@drawable/bg_header_login"
+        android:elevation="4dp">
 
-    <TextView
-        android:id="@+id/tv_doctor_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Doctor: "
-        android:textSize="15sp"
-        android:layout_marginTop="4dp" />
-
-    <!-- Date Picker Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:hintEnabled="true"
-        android:hint="Select Date">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_date"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@android:color/white"
+            android:padding="16dp"
+            android:elevation="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:drawableEnd="@drawable/ic_calendar"
-            android:focusable="false"
-            android:inputType="none"
-            android:paddingEnd="8dp"
-            tools:ignore="TouchTargetSizeCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:focusable="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
 
-    <!-- Slots Recycler -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_slots"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Book Appointment"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_header_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select your preferred date and time"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"/>
+        android:fillViewport="true"
+        android:paddingHorizontal="16dp">
 
-    <!-- Book Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_book"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Book Appointment"
-        android:textAllCaps="false"
-        android:enabled="false"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_marginTop="12dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="16dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_card_gradient"
+                android:clipToOutline="true"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="8dp"
+                    android:text="Booking Summary"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_service_card"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textColor="@color/gray"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_service_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="General Checkup"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_doctor_card"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Doctor"
+                        android:textColor="@color/gray"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_doctor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dr. Priya Sharma"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="8dp"
+                android:text="Select Date"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:focusable="false"
+                    android:hint="dd/mm/yyyy"
+                    android:inputType="none"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_slots_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="6dp"
+                android:text="Available Slots"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <com.example.childrencare.WrapContentRecyclerView
+                android:id="@+id/recycler_slots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:nestedScrollingEnabled="false" />
+
+
+            <Button
+                android:id="@+id/btn_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:enabled="false"
+                android:background="@drawable/bg_button_gradient"
+                android:text="Confirm Booking"
+                android:textAllCaps="false"
+                app:backgroundTint="@null"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

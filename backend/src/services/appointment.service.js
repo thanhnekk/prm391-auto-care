@@ -5,8 +5,10 @@ const ServiceType = require("../models/servicetype.model.js");
 const BaseError = require("../utils/BaseError.js");
 const { StatusCodes } = require("http-status-codes");
 const { generateVnPayUrl } = require("../utils/generateVNPAYUrl.js");
-// Thời gian tối thiểu trước khi đặt lịch (2 ngày)
+// Thời gian tối thiểu trước khi đặt lịch (2 ngày cho Cash, 1 ngày cho VNPay), tối đa 30 ngày
 const MIN_SCHEDULE_DIFF_MS = 2 * 24 * 60 * 60 * 1000; // 2 ngày
+const MIN_SCHEDULE_DIFF_MS_VNPAY = 1 * 24 * 60 * 60 * 1000; // 1 ngày
+const MAX_SCHEDULE_DIFF_MS = 2 * 24 * 60 * 60 * 1000; // 30 ngày
 // Thời gian tối đa để thanh toán (12h)
 const PAYMENT_WINDOW_MS = 12 * 60 * 60 * 1000; // 12 giờ
 // Giờ làm việc chung
@@ -46,10 +48,12 @@ const createAppointment = async ({ userId, doctorId, serviceTypeId, scheduledAt,
 
         const scheduleDate = new Date(scheduledAt);
         const now = new Date();
-        if (scheduleDate - now < MIN_SCHEDULE_DIFF_MS) {
-            throw new BaseError(StatusCodes.BAD_REQUEST, "Phải đặt lịch ít nhất 2 ngày trước");
+        if (scheduleDate - now < MIN_SCHEDULE_DIFF_MS && payAppointment!="Cash") {
+            throw new BaseError(StatusCodes.BAD_REQUEST, "Người dùng thanh toán tiền mặt phải đặt lịch ít nhất 2 ngày");
         }
-
+        if (scheduleDate - now < MIN_SCHEDULE_DIFF_MS_VNPAY && payAppointment!="VNPay") {
+            throw new BaseError(StatusCodes.BAD_REQUEST, "Người dùng thanh toán VNPay phải đặt lịch ít nhất 1 ngày");
+        }
         // Kiểm tra slot trống
         console.log("Checking slot for doctor:", doctorId, "at", scheduleDate.toISOString());
         const available = await isSlotAvailable(doctorId, scheduleDate);
@@ -83,7 +87,6 @@ const createAppointment = async ({ userId, doctorId, serviceTypeId, scheduledAt,
                 paymentUrl               // URL VNPAY cho FE mở
             };
         } else {
-            // Cash trả về appointment như bình thường
             return appointment;
         }
 
@@ -134,12 +137,55 @@ const payAppointment = async (appointmentId) => {
 const cancelAppointment = async (appointmentId) => {
     const appt = await Appointment.findById(appointmentId);
     if (!appt) throw new BaseError(StatusCodes.NOT_FOUND, "Appointment không tồn tại");
-    if (appt.status !== "pending") throw new BaseError(StatusCodes.BAD_REQUEST, "Chỉ hủy được khi pending");
+
+    const now = new Date();
+    const scheduleDate = new Date(appt.scheduledAt);
+    const timeDiff = scheduleDate - now; // milliseconds
+    const HOURS_24_MS = 24 * 60 * 60 * 1000;
+    const HOURS_6_MS = 6 * 60 * 60 * 1000;
+
+
+    if (appt.paymentMethod === "VNPay") {
+        if (timeDiff < HOURS_6_MS) {
+        throw new BaseError(StatusCodes.BAD_REQUEST, "Người dùng thanh toán với VNPay chỉ được hủy lịch hẹn trước 6 giờ");
+        }
+        if (appt.status !== "pending") {
+            throw new BaseError(StatusCodes.BAD_REQUEST, "Chỉ được hủy VNPay khi trạng thái là pending");
+        }
+    } else if (appt.paymentMethod === "Cash") {
+        if (timeDiff < HOURS_24_MS) {
+        throw new BaseError(StatusCodes.BAD_REQUEST, "Người dùng thanh toán tiền mặt chỉ được hủy lịch hẹn trước 24 giờ");
+        }
+        if (!["pending", "confirmed"].includes(appt.status)) {
+            throw new BaseError(StatusCodes.BAD_REQUEST, "Chỉ được hủy Cash khi trạng thái là pending hoặc confirmed");
+        }
+    } else {
+        throw new BaseError(StatusCodes.BAD_REQUEST, "Phương thức thanh toán không hợp lệ");
+    }
 
     appt.status = "canceled";
     await appt.save();
     return appt;
 };
+
+
+const retryPayment = async (appointmentId) => {
+    const appt = await Appointment.findById(appointmentId);
+    if (!appt) throw new BaseError(StatusCodes.NOT_FOUND, "Appointment không tồn tại");
+    if (appt.paid) throw new BaseError(StatusCodes.BAD_REQUEST, "Appointment đã thanh toán");
+    if (appt.status !== "pending")
+        throw new BaseError(StatusCodes.BAD_REQUEST, "Không thể thanh toán cho appointment này");
+
+    // Cập nhật txnRef mới
+    const newTxnRef = `${appt._id}_${Date.now()}`;
+    appt.txnRef = newTxnRef;
+    await appt.save();
+
+    // Tạo URL thanh toán mới
+    const paymentUrl = generateVnPayUrl(appt);
+    return { paymentUrl };
+};
+
 
 // Hoàn tất khám
 const completeAppointment = async (appointmentId) => {
@@ -337,5 +383,6 @@ module.exports = {
     cancelPendingAppointments, // <- cron job
     getDoctorSlots,
     getAppointmentById,
-    getAppointmentByIdWithAuth
+    getAppointmentByIdWithAuth,
+    retryPayment
 };

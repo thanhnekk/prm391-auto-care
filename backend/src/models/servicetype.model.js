@@ -12,6 +12,11 @@ const serviceTypeSchema = new mongoose.Schema({
     trim: true,
     default: "" 
   },
+  imageUrl: {
+    type: String, 
+    trim: true,
+    default: "" 
+  },
   price: { 
     type: Number, 
     required: [true, "Giá dịch vụ là bắt buộc"], 

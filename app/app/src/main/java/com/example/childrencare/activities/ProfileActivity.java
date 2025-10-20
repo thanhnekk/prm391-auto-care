@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView; // <-- Thêm import
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,22 +27,38 @@ public class ProfileActivity extends AppCompatActivity {
     private TokenManager tokenManager;
     private ApiService apiService;
 
+    private ImageView ivBackArrow; // <-- Thêm biến cho nút back
+    private TextView tvHeaderTitle, tvHeaderSubtitle; // <-- Thêm biến cho header text
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // Khởi tạo các view trong card
         tvAvatar = findViewById(R.id.tv_avatar);
         tvUsername = findViewById(R.id.tv_username);
         tvEmail = findViewById(R.id.tv_email);
         btnLogout = findViewById(R.id.btn_action);
-        tokenManager = new TokenManager(this);
 
-        // Lấy instance ApiService có interceptor tự thêm token
+        // (ĐÃ THÊM) Khởi tạo các view trong header
+        ivBackArrow = findViewById(R.id.iv_back_arrow);
+        tvHeaderTitle = findViewById(R.id.tv_header_title);
+        tvHeaderSubtitle = findViewById(R.id.tv_header_subtitle);
+
+        // (ĐÃ THÊM) Set text cho header
+        tvHeaderTitle.setText("Profile");
+        tvHeaderSubtitle.setText("Your account details");
+
+        // Khởi tạo các thành phần khác
+        tokenManager = new TokenManager(this);
         apiService = ApiClient.getClient(this).create(ApiService.class);
 
         // Gọi API lấy thông tin user
         fetchUserProfile();
+
+        // (ĐÃ THÊM) Xử lý nút quay lại
+        ivBackArrow.setOnClickListener(v -> finish());
 
         // Xử lý logout
         btnLogout.setOnClickListener(v -> {

@@ -2,7 +2,11 @@ package com.example.childrencare.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +31,8 @@ public class ServiceListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerServices;
     private ServiceAdapter adapter;
+    private EditText etSearch;
+    private ImageView ivBackArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +41,24 @@ public class ServiceListActivity extends AppCompatActivity {
 
         recyclerServices = findViewById(R.id.recycler_services);
         recyclerServices.setLayoutManager(new LinearLayoutManager(this));
-
+        etSearch = findViewById(R.id.et_search);
+        ivBackArrow = findViewById(R.id.iv_back_arrow);
+        ivBackArrow.setOnClickListener(v -> finish());
         loadAllServices();
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (adapter != null) {
+                    adapter.filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
     }
 
     private void loadAllServices() {

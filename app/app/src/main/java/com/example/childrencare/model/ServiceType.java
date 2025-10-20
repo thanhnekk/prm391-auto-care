@@ -8,6 +8,7 @@ public class ServiceType {
     private String name;
     private String description;
     private double price;
+    private  String imageUrl;
     private String createdAt;
     private String updatedAt;
 
@@ -38,4 +39,12 @@ public class ServiceType {
 
     public String getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

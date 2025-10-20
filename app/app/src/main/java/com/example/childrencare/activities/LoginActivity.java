@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private FrameLayout loadingOverlay;
     private TokenManager tokenManager;
     private static final String TAG = "LoginActivity";
-
+    private TextView tvRegister, tvRegisterLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,15 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         loadingOverlay = findViewById(R.id.loading_overlay);
         tokenManager = new TokenManager(this);
+        tvRegister = findViewById(R.id.tv_register);
+        tvRegisterLink = findViewById(R.id.tv_register_link);
+        View.OnClickListener registerClickListener = v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        };
 
+        tvRegister.setOnClickListener(registerClickListener);
+        tvRegisterLink.setOnClickListener(registerClickListener);
         btnLogin.setOnClickListener(v -> {
             hideKeyboard();
             login();

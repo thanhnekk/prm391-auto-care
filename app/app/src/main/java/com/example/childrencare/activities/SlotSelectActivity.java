@@ -3,6 +3,9 @@ package com.example.childrencare.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -29,15 +32,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import com.example.childrencare.singleton.BookingSession;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public class SlotSelectActivity extends AppCompatActivity {
 
     private RecyclerView recyclerSlots;
     private SlotAdapter adapter;
     private TextInputEditText etDate;
-    private MaterialButton btnBook;
+    private Button btnBook;
     private TextView tvServiceName, tvDoctorName;
-
+    private ImageView ivBackArrow;
     private String selectedDate;
     private String selectedSlotTime;
     private String doctorId, serviceName, doctorName;
@@ -53,7 +57,7 @@ public class SlotSelectActivity extends AppCompatActivity {
         btnBook = findViewById(R.id.btn_book);
         tvServiceName = findViewById(R.id.tv_service_name);
         tvDoctorName = findViewById(R.id.tv_doctor_name);
-
+        ivBackArrow = findViewById(R.id.iv_back_arrow);
         recyclerSlots.setLayoutManager(new LinearLayoutManager(this));
 
         // Nhận dữ liệu từ Intent
@@ -66,6 +70,7 @@ public class SlotSelectActivity extends AppCompatActivity {
 
         setupDatePicker();
         setupBookButton();
+        ivBackArrow.setOnClickListener(v -> finish());
     }
 
     private void setupDatePicker() {
@@ -116,7 +121,7 @@ public class SlotSelectActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<Slot>> call, @NonNull Response<List<Slot>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Slot> slots = response.body();
-
+                    Log.e("SLOT_DEBUG", "Received slots: " + slots.size());
                     adapter = new SlotAdapter(SlotSelectActivity.this, slots, slot -> {
                         selectedSlotTime = slot.getStartTime() + " - " + slot.getEndTime();
                         Toast.makeText(SlotSelectActivity.this, "Selected: " + selectedSlotTime, Toast.LENGTH_SHORT).show();

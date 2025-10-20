@@ -13,6 +13,7 @@ import com.example.childrencare.model.Appointment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -45,7 +46,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
         holder.tvDoctorName.setText(appt.getDoctor() != null ? appt.getDoctor().getName() : "Unknown Doctor");
         holder.tvServiceName.setText("Service: " + (appt.getService() != null ? appt.getService().getName() : "N/A"));
-
+        // Date formatting
         String scheduledAt = appt.getScheduledAt();
         try {
             SimpleDateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -60,9 +61,28 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             e.printStackTrace();
         }
 
-        holder.tvStatus.setText("Status: " + appt.getStatus());
+        holder.tvPaymentMethod.setText("Payment Method: " +
+                (appt.getPaymentMethod() != null ? appt.getPaymentMethod() : "N/A"));
+        // Status color
+        String status = appt.getStatus().toLowerCase();
+        holder.tvStatus.setText("Status: " + status);
+        switch (status) {
+            case "canceled":
+                holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(android.R.color.holo_red_dark));
+                break;
+            case "confirmed":
+                holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(android.R.color.holo_blue_dark));
+                break;
+            case "done":
+                holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(android.R.color.holo_green_dark));
+                break;
+            case "pending":
+                holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(android.R.color.holo_orange_dark));
+                break;
+            default:
+                holder.tvStatus.setTextColor(holder.itemView.getResources().getColor(android.R.color.black));
+        }
 
-        // Set click listener cho cả item
         holder.itemView.setOnClickListener(v -> listener.onItemClick(appt));
     }
 
@@ -71,14 +91,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         return appointments.size();
     }
 
+    public void updateList(List<Appointment> newList) {
+        this.appointments = newList;
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDoctorName, tvServiceName, tvScheduledAt, tvStatus;
+        TextView tvDoctorName, tvServiceName, tvScheduledAt, tvStatus,tvPaymentMethod;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDoctorName = itemView.findViewById(R.id.tv_doctor_name);
             tvServiceName = itemView.findViewById(R.id.tv_service_name);
             tvScheduledAt = itemView.findViewById(R.id.tv_scheduled_at);
+            tvPaymentMethod = itemView.findViewById(R.id.tv_payment_method);
             tvStatus = itemView.findViewById(R.id.tv_status);
         }
     }

@@ -9,7 +9,7 @@ const appointmentSchema = new mongoose.Schema({
 
   // Thanh toán
   paid: { type: Boolean, default: false },           // Trạng thái thanh toán
-  paymentMethod: { type: String, enum: ['VNPay', 'Momo', 'Cash'], default: 'Cash' },
+  paymentMethod: { type: String, enum: ['VNPay','Cash'], default: 'Cash' },
   txnRef: { type: String, default: null },          // Mã giao dịch merchant (vnp_TxnRef)
   transactionNo: { type: String, default: null },   // Mã giao dịch cổng thanh toán (vnp_TransactionNo)
 

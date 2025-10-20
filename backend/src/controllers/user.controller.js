@@ -3,6 +3,7 @@ const UserService = require("../services/user.service");
 
 const createUser = async (req, res, next) => {
     try {
+        console.log("📥 Received data in createUser:", req.body);
         const savedUser = await UserService.createUser(req.body);
         res.status(201).json(savedUser);
     } catch (err) { next(err); }

@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     // Auth
-    @POST("auth/register") // Đăng ký
+    @POST("users/") // Đăng ký
     Call<User> register(@Body User user);
 
     @POST("auth/login") // Đăng nhập
@@ -30,6 +30,7 @@ public interface ApiService {
     //User
     @GET("users/by-email") // Lấy thông tin user by email( Hiện ở main, profile,...)
     Call<User> getUserDetail();
+
 
     // Doctor
     @GET("doctor") // Lấy tất cả các doctor( admin)
@@ -55,6 +56,12 @@ public interface ApiService {
     // Thanh toán appointment VNPay thành công
     @POST("appointments/{id}/pay")
     Call<JsonObject> payAppointment(@Path("id") String appointmentId);
+    // Thanh toán lại appointment VNPay
+    @POST("appointments/{id}/repay")
+    Call<JsonObject> repayAppointment(@Path("id") String appointmentId);
+    // Hủy apm
+    @POST("appointments/{id}/cancel")
+    Call<JsonObject> cancelAppointment(@Path("id") String appointmentId);
 
     // Prescription
     @GET("prescription/appointment/{appointmentId}") // NaN

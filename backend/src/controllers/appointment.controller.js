@@ -17,6 +17,13 @@ const payAppointment = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
+const repayAppointment = async (req, res, next) => {
+    try {
+        const appt = await AppointmentService.retryPayment(req.params.id);
+        res.status(200).json(appt);
+    } catch (err) { next(err); }
+};
+
 const cancelAppointment = async (req, res, next) => {
     try {
         const appt = await AppointmentService.cancelAppointment(req.params.id);
@@ -68,4 +75,4 @@ const getAppointmentByIdWithAuth = async (req, res, next) => {
         next(err);
     }
 };
-module.exports = { createAppointment, payAppointment, cancelAppointment, completeAppointment, getAppointmentsByUser,getDoctorSlots, getAppointmentById, getAppointmentByIdWithAuth };
+module.exports = { createAppointment, payAppointment, cancelAppointment, completeAppointment, getAppointmentsByUser,getDoctorSlots, getAppointmentById, getAppointmentByIdWithAuth,repayAppointment };

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSeeAll;
     LinearLayout btnProfile ;
     LinearLayout btnBookNow;
+    Button btnBookingList;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         tvSeeAll = findViewById(R.id.tv_see_all);
         btnProfile = findViewById(R.id.btn_profile);
         btnBookNow = findViewById(R.id.btn_book_now);
+        btnBookingList = findViewById(R.id.btn_booking_list);
 
         btnProfile.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class))
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         tvSeeAll.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, ServiceListActivity.class))
         );
+
+        btnBookingList.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, BookingListActivity.class)));
 
     }
 
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     recyclerFeatured.setLayoutManager(
-                            new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false)
+                            new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false)
                     );
                     recyclerFeatured.setAdapter(adapter);
 

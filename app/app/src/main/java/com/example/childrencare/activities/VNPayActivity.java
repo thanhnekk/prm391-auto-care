@@ -115,6 +115,9 @@ public class VNPayActivity extends AppCompatActivity {
             payAppointmentBackend();
         } else {
             Toast.makeText(this, "Thanh toán thất bại hoặc hủy!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(VNPayActivity.this, BookingDetailActivity.class);
+            intent.putExtra("appointment_id", appointmentId);
+            startActivity(intent);
             finish();
         }
     }
@@ -133,7 +136,6 @@ public class VNPayActivity extends AppCompatActivity {
                     if (appt != null) {
                         Log.d(TAG, "Appointment updated: " );
                         Toast.makeText(VNPayActivity.this, "Thanh toán hoàn tất!", Toast.LENGTH_SHORT).show();
-                        // Chuyển sang BookingDetailActivity
                         Intent intent = new Intent(VNPayActivity.this, BookingDetailActivity.class);
                         intent.putExtra("appointment_id", appointmentId);
                         startActivity(intent);

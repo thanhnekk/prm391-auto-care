@@ -1,75 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Header Gradient -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="22dp"
-            app:cardElevation="4dp">
+            android:layout_height="150dp"
+            android:background="@drawable/bg_header_login"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/tv_greeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Welcome, Parent!"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_header_gradient">
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/ic_heart"
+                    app:tint="@android:color/white" />
 
                 <TextView
-                    android:id="@+id/tv_greeting"
+                    android:id="@+id/tv_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome, Parent!"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="6dp">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_heart"
-                        android:contentDescription="@string/cd_heart_icon"
-                        android:layout_marginEnd="6dp"
-                        app:tint="@android:color/white" />
-
-                    <TextView
-                        android:id="@+id/tv_subtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your child's health is our priority!"
-                        android:textSize="14sp"
-                        android:textColor="@android:color/white"/>
-                </LinearLayout>
+                    android:text="Your child's health is our priority!"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
+        </LinearLayout>
 
         <!-- Profile & Booking buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="4dp"
+            android:paddingHorizontal="16dp"
+            android:orientation="horizontal"
             android:weightSum="2">
 
             <!-- My Profile -->
@@ -77,30 +71,31 @@
                 android:id="@+id/btn_profile"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/bg_card_light_pink"
                 android:layout_marginEnd="8dp"
-                android:padding="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_card_light_pink"
+                android:clipToOutline="true"
                 android:elevation="2dp"
-                android:clipToOutline="true">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="@string/cd_profile_icon"
-                    app:tint="@color/purple_500" />
+                    android:background="@drawable/bg_circle_white"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/purple_200" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Profile"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
                     android:paddingTop="8dp"
-                    android:textColor="@color/black"/>
+                    android:text="My Profile"
+                    android:textColor="#7A3BFE"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <!-- Book Now -->
@@ -109,28 +104,28 @@
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:background="@drawable/bg_card_blue"
-                android:padding="12dp"
+                android:clipToOutline="true"
                 android:elevation="2dp"
-                android:clipToOutline="true">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/ic_calendar"
                     android:contentDescription="@string/cd_book_icon"
+                    android:src="@drawable/ic_calendar"
                     app:tint="@android:color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Book Now"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
                     android:paddingTop="8dp"
-                    android:textColor="@android:color/white"/>
+                    android:text="Book Now"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -138,37 +133,53 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp"
-            android:gravity="center_vertical">
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_featured_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Featured Services"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:textColor="@color/black"
-                android:layout_weight="1"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="See all →"
-                android:textStyle="bold"
                 android:textColor="@color/blue_500"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_featured_services"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="16dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never" />
-
+        <Button
+            android:id="@+id/btn_booking_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_button_gradient"
+            android:text="View My Bookings"
+            app:backgroundTint="@null"
+            android:layout_gravity="center_horizontal"
+            android:padding="16dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
