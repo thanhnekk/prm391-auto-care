@@ -6,6 +6,7 @@ const appointmentRoutes = require('./appointment.routes');
 const prescriptionRoutes = require('./prescription.routes');
 const notificationRoutes = require('./notification.routes');
 const serviceTypeRoutes = require('./servicetype.routes');
+const medicineRoutes = require('./medicines.routes');
 const applicationName = process.env.APPLICATION_NAME || 'api'; // fallback nếu chưa set
 
 module.exports = (app) => {
@@ -16,4 +17,5 @@ module.exports = (app) => {
     app.use(`/${applicationName}/prescriptions`, prescriptionRoutes);
     app.use(`/${applicationName}/notifications`, notificationRoutes);
     app.use(`/${applicationName}/servicetypes`, serviceTypeRoutes);
+    app.use(`/${applicationName}/medicines`, medicineRoutes);
 };

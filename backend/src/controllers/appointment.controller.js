@@ -75,4 +75,40 @@ const getAppointmentByIdWithAuth = async (req, res, next) => {
         next(err);
     }
 };
-module.exports = { createAppointment, payAppointment, cancelAppointment, completeAppointment, getAppointmentsByUser,getDoctorSlots, getAppointmentById, getAppointmentByIdWithAuth,repayAppointment };
+
+// Admin
+const adminGetAllAppointments = async (req, res, next) => {
+  try {
+    const result = await AppointmentService.adminGetAllAppointments(req.query);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const adminUpdateAppointment = async (req, res, next) => {
+  try {
+    const updatedAppt = await AppointmentService.adminUpdateAppointment(
+      req.params.id,
+      req.body
+    );
+    res.status(200).json({ message: "Cập nhật lịch hẹn thành công (Admin)", appointment: updatedAppt });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createAppointment,
+  payAppointment,
+  cancelAppointment,
+  completeAppointment,
+  getAppointmentsByUser,
+  getDoctorSlots,
+  getAppointmentById,
+  getAppointmentByIdWithAuth,
+  repayAppointment,
+  // --- Các hàm mới cho Admin ---
+  adminGetAllAppointments,
+  adminUpdateAppointment,
+};

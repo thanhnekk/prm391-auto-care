@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
   refreshToken: { type: String },
   fcmToken: { type: String }, 
   role: { type: String, enum: ['user', 'doctor', 'admin'], required: true },
+  status: {
+      type: String,
+      enum: ['active', 'locked', 'deleted'],
+      default: 'active',
+    },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

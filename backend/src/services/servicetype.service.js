@@ -5,6 +5,10 @@ const BaseError = require("../utils/BaseError.js");
 // Create new service type
 const createServiceType = async (data) => {
     try {
+        const { name, description, price } = data;
+        if (!name || !price) {
+            throw new BaseError(400, 'Tên và giá dịch vụ là bắt buộc');
+        }
         const existing = await ServiceType.findOne({ name: data.name });
         if (existing) {
             throw new Error("Service type này đã tồn tại");
@@ -49,19 +53,16 @@ const getServiceTypeById = async (id) => {
 
 // Update service type by id
 const updateServiceTypeById = async (id, data) => {
-    try {
-        const serviceType = await ServiceType.findById(id);
-        if (!serviceType) {
-            throw new BaseError(StatusCodes.NOT_FOUND, "ServiceType không tồn tại");
-        }
-        Object.assign(serviceType, data, { updatedAt: new Date() });
-        return await serviceType.save();
-    } catch (err) {
-        throw new BaseError(
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            `Lỗi khi cập nhật ServiceType: ${err.message}`
-        );
-    }
+    const { name, description, price } = data;
+    const serviceType = await ServiceType.findByIdAndUpdate(
+    id,
+    { name, description, price },
+    { new: true, runValidators: true } // {new: true} để trả về bản ghi đã update
+    );
+    if (!serviceType) {
+        throw new BaseError(404, 'Không tìm thấy dịch vụ');
+    } 
+  return serviceType;
 };
 
 // Delete service type by id

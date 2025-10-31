@@ -1,11 +1,21 @@
+// backend/src/models/medicines.model.js
 const mongoose = require('mongoose');
+
+// Đây là DANH MỤC THUỐC (Master List)
 const medicineSchema = new mongoose.Schema({
-  prescriptionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Prescription', required: true },
-  name: { type: String, required: true },
-  dosage: { type: String },  
-  duration: { type: String }, 
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+  name: { // Tên thuốc, ví dụ: "Paracetamol 500mg"
+    type: String, 
+    required: true,
+    unique: true // Tên thuốc không được trùng
+  },
+  unit: { // Đơn vị, ví dụ: "Viên", "Gói", "Chai"
+    type: String,
+    default: "Viên"
+  },
+  description: { // Ghi chú (nếu có)
+    type: String,
+    default: ""
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Medicine', medicineSchema);

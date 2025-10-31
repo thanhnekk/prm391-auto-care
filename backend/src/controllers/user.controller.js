@@ -55,4 +55,59 @@ const deleteUser = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-module.exports = { createUser, getAllUsers, getUserByEmail, updateUser, deleteUser };
+const adminGetAllUsers = async (req, res, next) => {
+  try {
+    // req.query sẽ chứa ?page=1&limit=10&role=user&search=...
+    const result = await UserService.adminGetAllUsers(req.query);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const adminGetUserById = async (req, res, next) => {
+  try {
+    const user = await UserService.adminGetUserById(req.params.id);
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const adminUpdateUser = async (req, res, next) => {
+  try {
+    const updatedUser = await UserService.adminUpdateUser(
+      req.params.id, // ID người bị sửa
+      req.body,
+      req.user._id // ID của admin đang thao tác (lấy từ token)
+    );
+    res.status(200).json({ message: "Cập nhật thành công (Admin)", user: updatedUser });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const adminDeleteUser = async (req, res, next) => {
+  try {
+    const result = await UserService.adminDeleteUser(
+      req.params.id, // ID người bị xóa
+      req.user._id // ID của admin đang thao tác
+    );
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+// Cập nhật module.exports
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUserByEmail,
+  updateUser,
+  deleteUser,
+  // --- Các hàm mới cho Admin ---
+  adminGetAllUsers,
+  adminGetUserById,
+  adminUpdateUser,
+  adminDeleteUser,
+};
