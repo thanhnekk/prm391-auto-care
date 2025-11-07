@@ -1,40 +1,53 @@
+// app/src/main/java/com/example/childrencare/model/Prescription.java
 package com.example.childrencare.model;
 
-public class Prescription {
-    private String id;
-    private String appointmentId;
-    private String medicine;
-    private String dosage;
+import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
+public class Prescription {
+
+    @SerializedName("_id")
+    private String id;
+
+    @SerializedName("appointmentId")
+    private CreateAppointmentResponse appointmentId;
+
+
+    @SerializedName("doctorName")
+    private String doctorName;
+
+    @SerializedName("notes")
+    private String notes;
+
+    @SerializedName("createdAt")
+    private String createdAt;
+
+    // Đây là thay đổi quan trọng
+    @SerializedName("medicines")
+    private List<MedicineItem> medicines;
+
+    // Getters
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAppointmentId() {
+    public CreateAppointmentResponse getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
+    public String getDoctorName() {
+        return doctorName;
     }
 
-    public String getMedicine() {
-        return medicine;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setMedicine(String medicine) {
-        this.medicine = medicine;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
+    public List<MedicineItem> getMedicines() {
+        return medicines;
     }
 }

@@ -21,6 +21,7 @@ import com.example.childrencare.R;
 import com.example.childrencare.api.ApiClient;
 import com.example.childrencare.api.ApiService;
 import com.example.childrencare.model.Appointment;
+import com.example.childrencare.model.CreateAppointmentResponse;
 import com.google.gson.JsonObject; // <-- Thêm import này
 
 import java.text.NumberFormat;
@@ -47,7 +48,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     private LinearLayout llActionButtons;
     private Button btnCancel, btnHome,btnPayNow;
     private ImageView ivBackArrow;
-
+    private Button btnViewPrescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         btnCancel = findViewById(R.id.btn_cancel);
         btnHome = findViewById(R.id.btn_home);
         btnPayNow = findViewById(R.id.btn_pay_now);
+        btnViewPrescription= findViewById(R.id.btnViewPrescription);
+
     }
 
     private void setupListeners() {
@@ -240,6 +243,16 @@ public class BookingDetailActivity extends AppCompatActivity {
             btnPayNow.setOnClickListener(v -> repayAppointment(a.getId()));
         } else {
             btnPayNow.setVisibility(View.GONE);
+        }
+        if (a.getStatus().equals("done")) {
+            btnViewPrescription.setVisibility(View.VISIBLE);
+            btnViewPrescription.setOnClickListener(v -> {
+                Intent intent = new Intent(BookingDetailActivity.this, PrescriptionDetailActivity.class);
+                intent.putExtra("APPOINTMENT_ID", a.getId());
+                startActivity(intent);
+            });
+        } else {
+            btnViewPrescription.setVisibility(View.GONE);
         }
     }
 

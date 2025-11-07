@@ -2,7 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import './FormModal.css';
 
-// Component này đơn giản vì Admin có toàn quyền
+// === BƯỚC 1: TẠO HÀM HELPER ===
+// Hàm này chuyển đổi "2025-11-10T10:00:00.000Z" (UTC)
+// thành "2025-11-10T17:00" (Local, để input hiểu)
+const convertToLocalInputString = (isoString) => {
+  if (!isoString) return '';
+  
+  const date = new Date(isoString); // 1. Chuyển thành Date object (giờ local)
+  
+  // 2. Lấy các thành phần của giờ local
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 vì tháng 0-11
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+  // 3. Trả về format YYYY-MM-DDTHH:mm
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 const AppointmentEditModal = ({ isOpen, onClose, onSave, appointment }) => {
   const [formData, setFormData] = useState({
     status: 'pending',
@@ -11,19 +29,11 @@ const AppointmentEditModal = ({ isOpen, onClose, onSave, appointment }) => {
 
   useEffect(() => {
     if (appointment) {
-        let localTime = '';
-      if (appointment.scheduledAt) {
-        const date = new Date(appointment.scheduledAt);
-        date.setHours(date.getHours() + 7); // UTC -> VN
-        localTime = date.toISOString().slice(0, 16);
-      }
+      // === BƯỚC 2: SỬA DÒNG NÀY ===
       setFormData({
         status: appointment.status,
-        // Format lại date cho input datetime-local
-        scheduledAt: appointment.scheduledAt 
-          ? new Date(appointment.scheduledAt).toISOString().slice(0, 16) 
-          : '',
-        // Bạn có thể thêm doctorId, ... ở đây nếu muốn
+        // Dùng hàm helper để lấy đúng giờ local
+        scheduledAt: convertToLocalInputString(appointment.scheduledAt)
       });
     }
   }, [appointment, isOpen]);
@@ -36,10 +46,12 @@ const AppointmentEditModal = ({ isOpen, onClose, onSave, appointment }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Gửi đi dữ liệu đã thay đổi
+    // === BƯỚC 3: KHÔNG CẦN SỬA GÌ Ở ĐÂY ===
+    // Khi lưu, 'formData.scheduledAt' là chuỗi "2025-11-10T17:00" (local)
+    // new Date("2025-11-10T17:00") -> Tạo Date object (local 17:00)
+    // .toISOString() -> Tự động chuyển về UTC "2025-11-10T10:00:00.000Z" (ĐÚNG)
     const dataToSave = {
       status: formData.status,
-      // Gửi về dạng ISO string
       scheduledAt: new Date(formData.scheduledAt).toISOString(),
     };
     onSave(appointment._id, dataToSave);
@@ -72,7 +84,7 @@ const AppointmentEditModal = ({ isOpen, onClose, onSave, appointment }) => {
             <input
               type="datetime-local"
               name="scheduledAt"
-              value={formData.scheduledAt}
+              value={formData.scheduledAt} // Giờ đã hiển thị đúng (17:00)
               onChange={handleChange}
             />
           </div>

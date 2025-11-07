@@ -3,7 +3,6 @@ package com.example.childrencare.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebResourceRequest;
@@ -19,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.childrencare.R;
 import com.example.childrencare.api.ApiClient;
 import com.example.childrencare.api.ApiService;
-import com.example.childrencare.model.Appointment;
-import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;

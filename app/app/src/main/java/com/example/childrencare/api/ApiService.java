@@ -41,7 +41,7 @@ public interface ApiService {
 
     // Appointment
     @POST("appointments") // Tạo lịch khám
-    Call<Appointment> createAppointment(@Body AppointmentRequest appointment);
+    Call<CreateAppointmentResponse> createAppointment(@Body AppointmentRequest appointment);
 
     @GET("appointments/my") // Lấy thông tin lịch khám của user, sửa thành không tham số, dùng jwt tự động
     Call<List<Appointment>> getAppointmentsByUser();
@@ -64,9 +64,10 @@ public interface ApiService {
     Call<JsonObject> cancelAppointment(@Path("id") String appointmentId);
 
     // Prescription
-    @GET("prescription/appointment/{appointmentId}") // NaN
-    Call<List<Prescription>> getPrescriptionByAppointment(@Path("appointmentId") String appointmentId);
-
+    @GET("prescriptions/by-appointment/{appointmentId}")
+    Call<Prescription> getPrescriptionByAppointment(
+            @Path("appointmentId") String appointmentId
+    );
     // ===== ServiceType API (user-accessible) =====
     @GET("servicetypes") // Lấy list service của hệ thống
     Call<List<ServiceType>> getAllServiceTypes();

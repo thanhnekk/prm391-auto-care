@@ -213,14 +213,15 @@ const getAppointmentsByDoctor = async (userId) => {
 
 // Lấy slots
 const getDoctorSlots = async (doctorId, dateStr) => {
-    const date = new Date(dateStr + "T00:00:00Z"); // Luôn dùng UTC
+    const date = new Date(dateStr + "T00:00:00Z"); // luôn dùng UTC
     const slots = [];
+
     for (let hour = WORK_START_HOUR; hour < WORK_END_HOUR; hour++) {
         const startTime = new Date(date);
-        startTime.setUTCHours(hour, 0, 0, 0); // Dùng UTC
-        
+        startTime.setUTCHours(hour, 0, 0, 0);
+
         const endTime = new Date(date);
-        endTime.setUTCHours(hour + 1, 0, 0, 0); // Dùng UTC
+        endTime.setUTCHours(hour + 1, 0, 0, 0);
 
         const conflict = await Appointment.findOne({
             doctorId,
@@ -228,14 +229,23 @@ const getDoctorSlots = async (doctorId, dateStr) => {
             status: { $in: ["pending", "confirmed"] }
         });
 
+        // Lấy giờ phút dạng HH:mm
+        const formatHHMM = (d) => {
+            const h = d.getUTCHours().toString().padStart(2, '0');
+            const m = d.getUTCMinutes().toString().padStart(2, '0');
+            return `${h}:${m}`;
+        };
+
         slots.push({
-            startTime: startTime.toISOString(), // Trả về ISO string (UTC)
-            endTime: endTime.toISOString(),
+            startTime: formatHHMM(startTime),
+            endTime: formatHHMM(endTime),
             available: !conflict
         });
     }
+
     return slots;
 };
+
 
 // Helper
 const _formatAppointmentForFE = (appt) => {

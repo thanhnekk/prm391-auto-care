@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@drawable/card_background"> <TextView
+    android:id="@+id/tvMedicineName"
+    android:layout_width="0dp"
+    android:layout_weight="1.5"
+    android:layout_height="wrap_content"
+    android:text="Paracetamol 500mg"
+    android:textColor="@color/black"
+    android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvMedicineDosage"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Sáng 1 viên, tối 1 viên"
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/tvMedicineDuration"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Trong 5 ngày"
+        android:textColor="@color/gray"/>
+</LinearLayout>

@@ -20,10 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.childrencare.R;
 import com.example.childrencare.api.ApiClient;
 import com.example.childrencare.api.ApiService;
-import com.example.childrencare.model.Appointment;
+import com.example.childrencare.model.CreateAppointmentResponse;
 import com.example.childrencare.model.AppointmentRequest;
 import com.example.childrencare.singleton.BookingSession;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -162,16 +161,16 @@ public class PaymentActivity extends AppCompatActivity {
             request.setScheduledAt(scheduledAt);
             request.setPaymentMethod(paymentMethod);
 
-            Call<Appointment> call = apiService.createAppointment(request);
+            Call<CreateAppointmentResponse> call = apiService.createAppointment(request);
             call.enqueue(new Callback<>() {
                 @Override
-                public void onResponse(@NonNull Call<Appointment> call, @NonNull Response<Appointment> response) {
+                public void onResponse(@NonNull Call<CreateAppointmentResponse> call, @NonNull Response<CreateAppointmentResponse> response) {
                     // Ẩn loading
                     loadingIndicator.setVisibility(View.GONE);
                     btnPay.setEnabled(true); // Kích hoạt lại nút
 
                     if (response.isSuccessful() && response.body() != null) {
-                        Appointment appointment = response.body();
+                        CreateAppointmentResponse appointment = response.body();
                         Toast.makeText(PaymentActivity.this, "Appointment created!", Toast.LENGTH_SHORT).show();
 
                         if (appointment.getId() == null) {
@@ -200,7 +199,7 @@ public class PaymentActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<Appointment> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<CreateAppointmentResponse> call, @NonNull Throwable t) {
                     // Ẩn loading
                     loadingIndicator.setVisibility(View.GONE);
                     btnPay.setEnabled(true); // Kích hoạt lại nút
@@ -220,7 +219,7 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-    private void handleApiError(Response<Appointment> response) {
+    private void handleApiError(Response<CreateAppointmentResponse> response) {
         String errorMessage = "Unknown error";
         if (response.errorBody() != null) {
             try {

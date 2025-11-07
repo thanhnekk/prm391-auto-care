@@ -219,9 +219,9 @@ public class BookingActivity extends AppCompatActivity {
                             "Cash" // default, you can add selection UI
                     );
 
-                    apiService.createAppointment(req).enqueue(new Callback<Appointment>() {
+                    apiService.createAppointment(req).enqueue(new Callback<CreateAppointmentResponse>() {
                         @Override
-                        public void onResponse(@NonNull Call<Appointment> call, @NonNull Response<Appointment> response) {
+                        public void onResponse(@NonNull Call<CreateAppointmentResponse> call, @NonNull Response<CreateAppointmentResponse> response) {
                             progressBooking.setVisibility(View.GONE);
                             if (response.isSuccessful()) {
                                 Toast.makeText(BookingActivity.this, "✅ Đặt lịch thành công!", Toast.LENGTH_LONG).show();
@@ -231,7 +231,7 @@ public class BookingActivity extends AppCompatActivity {
                             }
                         }
                         @Override
-                        public void onFailure(@NonNull Call<Appointment> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<CreateAppointmentResponse> call, @NonNull Throwable t) {
                             progressBooking.setVisibility(View.GONE);
                             Toast.makeText(BookingActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }

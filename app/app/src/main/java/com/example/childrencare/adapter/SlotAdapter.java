@@ -24,6 +24,11 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
     private final SlotClickListener listener;
     private final Context context;
     private int selectedPosition = RecyclerView.NO_POSITION; // lưu vị trí slot được chọn
+    private String extractHourMinute(String isoTime) {
+        if (isoTime == null || isoTime.length() < 16) return "";
+        // yyyy-MM-ddTHH:mm:ssZ -> lấy phần HH:mm
+        return isoTime.substring(11, 16);
+    }
 
     public SlotAdapter(Context context, List<Slot> slots, SlotClickListener listener) {
         this.context = context;
