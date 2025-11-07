@@ -1,0 +1,122 @@
+/* src/screens/admin/AdminCRUD.css */
+.admin-crud-screen {
+  width: 100%;
+}
+
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.screen-header h1 {
+  margin: 0;
+}
+
+.btn-create {
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.btn-create:hover {
+  background-color: #218838;
+}
+
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.crud-table th,
+.crud-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.crud-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.crud-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.crud-table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.crud-table td button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #212529;
+}
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+/* Thêm vào cuối file src/screens/admin/AdminCRUD.css */
+
+.filter-form {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-form input,
+.filter-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filter-form button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.status-active {
+  background-color: #d4edda; /* Green */
+  color: #155724;
+}
+
+.status-badge.status-locked {
+  background-color: #fff3cd; /* Yellow */
+  color: #856404;
+}
+
+.status-badge.status-deleted {
+  background-color: #f8d7da; /* Red */
+  color: #721c24;
+}

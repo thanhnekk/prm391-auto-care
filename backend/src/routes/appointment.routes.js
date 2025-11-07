@@ -5,6 +5,15 @@ const verifyJWT = require("../middlewares/verifyJWT");
 const { verifyAdmin } = require("../middlewares/verifyAdmin");
 const AppointmentController = require("../controllers/appointment.controller");
 
+
+// (GET /api/appointments/admin) - Lấy danh sách (phân trang/lọc)
+router.get("/admin", verifyAdmin, AppointmentController.adminGetAllAppointments);
+
+// (PUT /api/appointments/admin/:id) - Cập nhật 
+router.put("/admin/:id", verifyAdmin, AppointmentController.adminUpdateAppointment);
+
+router.get("/doctor/my", verifyJWT, AppointmentController.getMyAppointmentsDoctor);
+
 router.post("/", verifyJWT, AppointmentController.createAppointment);
 router.post("/:id/pay", verifyJWT, AppointmentController.payAppointment);
 router.post("/:id/repay", verifyJWT, AppointmentController.repayAppointment);//thanh toan lai
@@ -15,9 +24,4 @@ router.get("/slots/:doctorId", verifyJWT, AppointmentController.getDoctorSlots);
 router.get("/public/:id", AppointmentController.getAppointmentById); // ai cũng xem được
 router.get("/:id", verifyJWT, AppointmentController.getAppointmentByIdWithAuth); // chỉ owner
 
-// (GET /api/appointments/admin) - Lấy danh sách (phân trang/lọc)
-router.get("/admin", verifyAdmin, AppointmentController.adminGetAllAppointments);
-
-// (PUT /api/appointments/admin/:id) - Cập nhật 
-router.put("/admin/:id", verifyAdmin, AppointmentController.adminUpdateAppointment);
 module.exports = router;

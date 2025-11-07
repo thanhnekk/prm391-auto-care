@@ -1,0 +1,35 @@
+/* src/components/doctor/PrescriptionViewModal.css */
+.prescription-details p {
+  margin: 5px 0;
+}
+.prescription-details hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 15px 0;
+}
+.prescription-details h4 {
+  margin-bottom: 10px;
+}
+
+.prescription-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+.prescription-table th,
+.prescription-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.prescription-table th {
+  background-color: #f8f9fa;
+}
+
+.notes-box {
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 4px;
+  white-space: pre-wrap; /* Giữ định dạng xuống dòng */
+}

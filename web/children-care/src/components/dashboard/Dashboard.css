@@ -1,0 +1,79 @@
+.chart-container {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.chart-container h4 {
+  margin-top: 0;
+  text-align: center;
+  color: #343a40;
+}
+
+/* Fix lỗi rechart không hiển thị trong flex */
+.recharts-responsive-container {
+  width: 100% !important;
+  height: 300px !important;
+}
+/* src/components/dashboard/Dashboard.css */
+
+/* CSS cho các Card thống kê */
+.ant-statistic-card {
+  border-radius: 8px; /* Bo góc card */
+}
+
+/* Container cho biểu đồ */
+.chart-container {
+  margin-top: 24px;
+  padding: 24px;
+  background-color: #fff; /* Nền trắng */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chart-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Tùy chỉnh cho danh sách Lịch hẹn hôm nay của Bác sĩ */
+.today-appointments-list .ant-list-item-meta-title {
+  font-weight: 600;
+}
+
+.today-appointments-list .ant-list-item-meta-description {
+  color: #555;
+}
+
+/* CSS cho Statistic Cards mới */
+.colorful-statistic-card .ant-statistic-title {
+  color: rgba(0, 0, 0, 0.65); /* Màu tiêu đề */
+  font-size: 16px;
+}
+
+.colorful-statistic-card .ant-statistic-content {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Style cho icon prefix */
+.colorful-statistic-card .ant-statistic-content .ant-statistic-content-prefix {
+  margin-right: 12px;
+}
+
+.colorful-statistic-card .ant-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Căn giữa biểu đồ */
+.pie-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

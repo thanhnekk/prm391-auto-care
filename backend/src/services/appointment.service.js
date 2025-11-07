@@ -1,6 +1,7 @@
 const Appointment = require("../models/appointment.model.js");
 const Doctor = require("../models/doctor.model.js");
 const ServiceType = require("../models/servicetype.model.js");
+const { DateTime } = require("luxon");
 const User = require("../models/user.model.js"); 
 const BaseError = require("../utils/BaseError.js");
 const { StatusCodes } = require("http-status-codes");
@@ -185,6 +186,15 @@ const completeAppointment = async (appointmentId) => {
     if (!appt) throw new BaseError(StatusCodes.NOT_FOUND, "Appointment không tồn tại");
     if (appt.status !== "confirmed") throw new BaseError(StatusCodes.BAD_REQUEST, "Chỉ complete khi confirmed");
 
+  const now = DateTime.now().setZone("Asia/Ho_Chi_Minh");
+
+  const scheduledAtVN = DateTime.fromJSDate(appt.scheduledAt).setZone("Asia/Ho_Chi_Minh");
+
+  // ⚠️ Nếu còn hơn 1 tiếng nữa mới đến giờ hẹn thì không được complete
+  if (scheduledAtVN.diff(now, "hours").hours > -1) {
+    // Tức là hiện tại vẫn chưa trễ hơn scheduledAt 1 giờ
+    throw new BaseError(StatusCodes.BAD_REQUEST, "Chưa đến giờ hoàn thành lịch hẹn");
+  }
     appt.status = "done";
     appt.paid = true;
     await appt.save();
@@ -192,7 +202,12 @@ const completeAppointment = async (appointmentId) => {
 };
 
 // Lấy appointment theo bác sĩ
-const getAppointmentsByDoctor = async (doctorId) => {
+const getAppointmentsByDoctor = async (userId) => {
+    const doctorProfile = await Doctor.findOne({ userId: userId });
+    if (!doctorProfile) {
+      throw new BaseError(StatusCodes.NOT_FOUND, "Không tìm thấy hồ sơ bác sĩ.");
+    }
+    const doctorId = doctorProfile._id;
     return await Appointment.find({ doctorId }).populate("userId serviceTypeIds");
 };
 

@@ -97,6 +97,17 @@ const adminUpdateAppointment = async (req, res, next) => {
     next(err);
   }
 };
+const getMyAppointmentsDoctor = async (req, res, next) => {
+  try {
+    // 1. Lấy userId từ token (đây là ID của user bác sĩ)
+    const userId = req.user.id; 
+    const appts = await AppointmentService.getAppointmentsByDoctor(userId);
+    res.status(200).json(appts);
+    
+  } catch (err) { 
+    next(err); 
+  }
+};
 
 module.exports = {
   createAppointment,
@@ -111,4 +122,5 @@ module.exports = {
   // --- Các hàm mới cho Admin ---
   adminGetAllAppointments,
   adminUpdateAppointment,
+  getMyAppointmentsDoctor,
 };

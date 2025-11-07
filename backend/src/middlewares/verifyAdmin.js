@@ -1,6 +1,5 @@
 // backend/src/middlewares/verifyAdmin.js
-const { verifyToken } = require('./verifyJWT');
-
+const verifyToken = require('./verifyJWT');
 const verifyAdmin = (req, res, next) => {
   // 1. Xác thực token trước (dùng lại hàm cũ)
   verifyToken(req, res, () => {

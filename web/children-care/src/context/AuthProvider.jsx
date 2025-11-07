@@ -18,7 +18,7 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({accessToken: null, user: null});
+  const [auth, setAuth] = useState({ accessToken: null, user: null });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const alertShownRef = useRef(false);
   const [loading, setLoading] = useState(true);
@@ -52,69 +52,75 @@ const AuthProvider = ({ children }) => {
     };
   }, [auth]);
   useLayoutEffect(() => {
-    const refreshInterceptor = axios.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        // save error.config(as a configuration object) to retry request later
-        const originalRequest = error.config;
-        if (originalRequest._retry) {
-          return Promise.reject(error);
-        }
-        if (
-          error.response?.status === 401 &&
-          error.response?.data.code === 4003
-        ) {
-          if (isRefreshing) {
-            return Promise.reject(error);
-          }
-          setIsRefreshing(true);
-          originalRequest._retry = true;
-          try {
-            // call to refresh Refresh token
-            const response = await axios.get(`${BASE_URL}/auth/refresh`, {
-              withCredentials: true,
-            });
-            console.log("Through cookie refresh");
-            // console.log("csrf response",response);
-            // localStorage.setItem("csrfToken",response.data.data);
-            //marked as retried
-            setIsRefreshing(false);
-            // Save new access token
-            const newAccessToken = response.data.accessToken;
-            localStorage.setItem("accessToken", newAccessToken);
-            //retry failed request
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return axios(originalRequest);
-          } catch (refreshError) {
-            setIsRefreshing(false);
-            console.log("Request refresh token failed: ", refreshError);
-            if (!alertShownRef.current) {
-              // Show alert only once
-              alertShownRef.current = true;
-              alert(
-                "This account is offline too long! Please try to login again."
-              );
-              //await logoutUser();
-              setTimeout(() => {
-                alertShownRef.current = false; // Reset after navigation
-                nav("/login");
-              }, 0);
-            }
-            return Promise.reject(refreshError);
-          }
-        }
-        // if not 401, reject error
+  const refreshInterceptor = axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+
+      // ✅ Kiểm tra trước khi dùng
+      if (!originalRequest) {
+        console.error("Axios error without config:", error);
         return Promise.reject(error);
       }
-    );
-    return () => {
-      axios.interceptors.response.eject(refreshInterceptor);
-    };
-  }, [nav, isRefreshing]);
+
+      if (originalRequest._retry) {
+        return Promise.reject(error);
+      }
+
+      if (error.response?.status === 401) {
+        if (isRefreshing) {
+          return Promise.reject(error);
+        }
+
+        setIsRefreshing(true);
+        originalRequest._retry = true;
+
+        try {
+          const response = await axios.get(`${BASE_URL}/auth/refresh`, {
+            withCredentials: true,
+          });
+
+          console.log("Through cookie refresh");
+
+          const newAccessToken = response.data.accessToken;
+          localStorage.setItem("accessToken", newAccessToken);
+          setIsRefreshing(false);
+
+          // Gắn lại header Authorization và thử gửi lại request ban đầu
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axios(originalRequest);
+        } catch (refreshError) {
+          setIsRefreshing(false);
+          console.log("Request refresh token failed: ", refreshError);
+
+          if (!alertShownRef.current) {
+            alertShownRef.current = true;
+            alert("This account is offline too long! Please try to login again.");
+            setTimeout(() => {
+              alertShownRef.current = false;
+              nav("/login");
+            }, 0);
+          }
+
+          return Promise.reject(refreshError);
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return () => {
+    axios.interceptors.response.eject(refreshInterceptor);
+  };
+}, [nav, isRefreshing]);
+
   return (
-    <AuthContext.Provider value={{ ...auth, setAuth, loading }}>
+
+    <AuthContext.Provider value={{ auth, setAuth, loading }}>
       {children}
     </AuthContext.Provider>
+
   );
 };
 export default AuthProvider;

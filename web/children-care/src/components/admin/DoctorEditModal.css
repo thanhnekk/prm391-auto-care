@@ -1,0 +1,23 @@
+/* src/components/admin/DoctorEditModal.css */
+.checkbox-group {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.checkbox-label {
+  display: block;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.checkbox-label:hover {
+  background-color: #e9ecef;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+}
