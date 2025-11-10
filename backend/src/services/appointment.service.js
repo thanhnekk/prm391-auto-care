@@ -17,7 +17,11 @@ const WORK_END_HOUR = 17;
 // Kiểm tra slot trống (1h/slot)
 const isSlotAvailable = async (doctorId, scheduledAt) => {
     const startHour = scheduledAt.getHours();
-    if (startHour < WORK_START_HOUR || startHour >= WORK_END_HOUR) return false;
+    console.log(startHour)
+    if (startHour < WORK_START_HOUR || startHour >= WORK_END_HOUR) {
+        console.log("Ngoài giờ làm việc")
+        return false;
+    }
     const slotStart = new Date(scheduledAt);
     slotStart.setMinutes(0, 0, 0);
     const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
@@ -27,6 +31,7 @@ const isSlotAvailable = async (doctorId, scheduledAt) => {
         scheduledAt: { $gte: slotStart, $lt: slotEnd },
         status: { $in: ["pending", "confirmed"] }
     });
+    console.log(conflict)
     return !conflict;
 };
 
@@ -213,37 +218,35 @@ const getAppointmentsByDoctor = async (userId) => {
 
 // Lấy slots
 const getDoctorSlots = async (doctorId, dateStr) => {
-    const date = new Date(dateStr + "T00:00:00Z"); // luôn dùng UTC
-    const slots = [];
+  const date = new Date(dateStr); // local time (UTC+7)
+  const slots = [];
 
-    for (let hour = WORK_START_HOUR; hour < WORK_END_HOUR; hour++) {
-        const startTime = new Date(date);
-        startTime.setUTCHours(hour, 0, 0, 0);
+  for (let hour = WORK_START_HOUR; hour < WORK_END_HOUR; hour++) {
+    const startTime = new Date(date);
+    startTime.setHours(hour, 0, 0, 0);
+    const endTime = new Date(date);
+    endTime.setHours(hour + 1, 0, 0, 0);
 
-        const endTime = new Date(date);
-        endTime.setUTCHours(hour + 1, 0, 0, 0);
+    const conflict = await Appointment.findOne({
+      doctorId,
+      scheduledAt: { $gte: startTime, $lt: endTime },
+      status: { $in: ["pending", "confirmed"] },
+    });
 
-        const conflict = await Appointment.findOne({
-            doctorId,
-            scheduledAt: startTime,
-            status: { $in: ["pending", "confirmed"] }
-        });
+    console.log({
+      slotLocal: `${startTime.toString()} - ${endTime.toString()}`,
+      slotUTC: `${startTime.toISOString()} - ${endTime.toISOString()}`,
+      conflictFound: !!conflict,
+    });
 
-        // Lấy giờ phút dạng HH:mm
-        const formatHHMM = (d) => {
-            const h = d.getUTCHours().toString().padStart(2, '0');
-            const m = d.getUTCMinutes().toString().padStart(2, '0');
-            return `${h}:${m}`;
-        };
+    slots.push({
+      startTime: startTime.getHours().toString().padStart(2, "0") + ":00",
+      endTime: endTime.getHours().toString().padStart(2, "0") + ":00",
+      available: !conflict,
+    });
+  }
 
-        slots.push({
-            startTime: formatHHMM(startTime),
-            endTime: formatHHMM(endTime),
-            available: !conflict
-        });
-    }
-
-    return slots;
+  return slots;
 };
 
 

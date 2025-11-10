@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://10.0.2.2:8080/childrencare/";
+    private static final String BASE_URL = "https://prm391-auto-care.onrender.com/childrencare/";
     private static final String TAG = "ApiClient";
     private static Retrofit retrofit;
 
@@ -44,12 +44,10 @@ public class ApiClient {
         if (retrofit == null) {
             TokenManager tokenManager = new TokenManager(context);
 
-            // ✅ Logging interceptor đặt cuối cùng để tránh lỗi closed
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    // ✅ Interceptor chính xử lý token và refresh
                     .addInterceptor(new AuthInterceptor(context, tokenManager))
                     .addInterceptor(logging)
                     .build();
